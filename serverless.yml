@@ -6,7 +6,12 @@ plugins:
 
 # Enable auto-packing of external modules
 custom:
-  webpackIncludeModules: true
+  webpackIncludeModules:
+    forceInclude:
+      - babel-runtime
+
+package:
+  excludeDevDependencies: false
 
 provider:
   name: aws
@@ -26,7 +31,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+      Resource: "arn:aws:dynamodb:us-east-2:*:*"
 
 functions:
   # Defines an HTTP API endpoint that calls the main function in create.js
