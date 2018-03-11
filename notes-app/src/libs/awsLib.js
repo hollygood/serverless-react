@@ -13,6 +13,14 @@ export async function authUser() {
   return true;
 }
 
+export function signOutUser() {
+  const currentUser = getCurrentUser();
+
+  if (currentUser !== null) {
+    currentUser.signOut();
+  }
+}
+
 function getUserToken(currentUser) {
   return new Promise((resolve, reject) => {
     currentUser.getSession(function(err, session) {
@@ -31,6 +39,6 @@ function getCurrentUser() {
     UserPoolId: config.cognito.USER_POOL_ID,
     ClientId: config.cognito.APP_CLIENT_ID
   });
-  
+
   return userPool.getCurrentUser();
 }

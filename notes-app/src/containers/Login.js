@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
 import config from "../config";
 import {
@@ -7,12 +7,14 @@ import {
   AuthenticationDetails,
   CognitoUser
 } from 'amazon-cognito-identity-js';
+import LoaderButton from '../components/LoaderButton';
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      isLoading: false,
       email: "",
       password: ""
     };
@@ -31,9 +33,12 @@ export default class Login extends Component {
   handleSubmit = async event => {
     event.preventDefault();
 
+    this.setState({ isLoading: true });
+
     try {
       await this.login(this.state.email, this.state.password);
       this.props.userHasAuthenticated(true);
+      this.props.history.push('/');
     } catch(e) {
       alert(e);
     }
@@ -78,14 +83,15 @@ export default class Login extends Component {
               type="password"
             />
           </FormGroup>
-          <Button
-            block
-            bsSize="large"
-            disabled={!this.validateForm()}
-            type="submit"
-          >
-            Login
-          </Button>
+          <LoaderButton
+           block
+           bsSize="large"
+           disabled={!this.validateForm()}
+           type="submit"
+           isLoading={this.state.isLoading}
+           text="Login"
+           loadingText="Logging in…"
+          />
         </form>
       </div>
     );
