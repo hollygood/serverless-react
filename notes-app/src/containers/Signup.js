@@ -6,6 +6,7 @@ import {
   ControlLabel
 } from 'react-bootstrap';
 import LoaderButton from "../components/LoaderButton";
+import ErrorMessage from "../components/ErrorMessage";
 import "./Signup.css";
 
 import {
@@ -25,7 +26,8 @@ export default class Signup extends Component {
       password: "",
       confirmPassword: "",
       confirmationCode: "",
-      newUser: null
+      newUser: null,
+      errorMessage: null
     };
   }
 
@@ -95,7 +97,7 @@ export default class Signup extends Component {
     return new Promise((resolve, reject) => {
       userPool.signUp(email, password, [], null, (err, result) => {
         if (err) {
-          debugger;
+          this.setState({ errorMessage: err.message})
           reject(err);
           return;
         }
@@ -203,6 +205,7 @@ export default class Signup extends Component {
   render() {
     return (
       <div className="Signup">
+        {this.state.errorMessage === null ? '' : <ErrorMessage message={this.state.errorMessage} />}
         {this.state.newUser === null
           ? this.renderForm()
           : this.renderConfirmationForm() }
